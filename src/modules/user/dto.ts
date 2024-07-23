@@ -16,15 +16,20 @@ import {
   IsString,
   Length,
 } from 'class-validator';
+
 export class Profile {
   @Allow()
   nickName: string;
+
   @Allow()
   gender: number;
+
   @Allow()
   avatar: string;
+
   @Allow()
   address: string;
+
   @Allow()
   email: string;
 }

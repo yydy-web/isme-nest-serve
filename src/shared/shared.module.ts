@@ -8,14 +8,14 @@
  **********************************/
 
 import { Global, Module, ValidationPipe } from '@nestjs/common';
-import { SharedService } from './shared.service';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { AllExceptionFilter } from '@/common/filters/all-exception.filter';
-import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RedisService } from './redis.service';
 import { createClient } from 'redis';
+import { RedisService } from './redis.service';
+import { SharedService } from './shared.service';
+import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
+import { AllExceptionFilter } from '@/common/filters/all-exception.filter';
 
 @Global()
 @Module({
@@ -62,7 +62,7 @@ import { createClient } from 'redis';
       useClass: TransformInterceptor,
     },
     {
-      //全局参数校验管道
+      // 全局参数校验管道
       provide: APP_PIPE,
       useValue: new ValidationPipe({
         whitelist: true,

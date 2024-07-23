@@ -20,10 +20,13 @@ export class RoleGuard implements CanActivate {
     const currentRoleCode = user.currentRoleCode;
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
     // 当前用户没有角色
-    if (!currentRoleCode) throw new CustomException(ErrorCode.ERR_11005);
-    if (!roles?.length) return true;
+    if (!currentRoleCode)
+      throw new CustomException(ErrorCode.ERR_11005);
+    if (!roles?.length)
+      return true;
     // 当前角色不在可操作角色范围内
-    if (!roles.includes(currentRoleCode)) throw new CustomException(ErrorCode.ERR_11003);
+    if (!roles.includes(currentRoleCode))
+      throw new CustomException(ErrorCode.ERR_11003);
     return true;
   }
 }

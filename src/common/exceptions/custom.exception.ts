@@ -7,8 +7,7 @@
  **********************************/
 
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { ERR } from './error-code';
-import { ErrInfo } from './error-code';
+import { ERR, ErrInfo } from './error-code';
 
 /**
  * 自定义异常类

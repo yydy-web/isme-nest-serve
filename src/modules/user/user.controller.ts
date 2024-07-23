@@ -9,15 +9,15 @@
 import {
   Body,
   Controller,
-  Get,
-  Post,
-  Param,
-  Query,
   Delete,
-  Patch,
+  Get,
+  Param,
   ParseIntPipe,
-  UseGuards,
+  Patch,
+  Post,
+  Query,
   Request,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {

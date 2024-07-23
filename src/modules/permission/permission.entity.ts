@@ -24,12 +24,12 @@ export class Permission {
   @Column()
   type: PermissionType;
 
-  @ManyToOne(() => Permission, (permission) => permission.children, {
+  @ManyToOne(() => Permission, permission => permission.children, {
     createForeignKeyConstraints: false,
   })
   parent: Permission;
 
-  @OneToMany(() => Permission, (permission) => permission.parent, {
+  @OneToMany(() => Permission, permission => permission.parent, {
     createForeignKeyConstraints: false,
   })
   children: Permission[];
@@ -70,7 +70,7 @@ export class Permission {
   @Column({ nullable: true })
   order: number;
 
-  @ManyToMany(() => Role, (role) => role.permissions, {
+  @ManyToMany(() => Role, role => role.permissions, {
     createForeignKeyConstraints: false,
   })
   roles: Role[];

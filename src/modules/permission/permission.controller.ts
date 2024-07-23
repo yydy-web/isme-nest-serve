@@ -7,15 +7,15 @@
  **********************************/
 
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { PermissionService } from './permission.service';
 import { CreatePermissionDto, UpdatePermissionDto } from './dto';

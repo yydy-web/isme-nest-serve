@@ -7,12 +7,12 @@
  **********************************/
 
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreatePermissionDto, UpdatePermissionDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Permission } from './permission.entity';
 import { In, Repository } from 'typeorm';
-import { SharedService } from '@/shared/shared.service';
 import { pathToRegexp } from 'path-to-regexp';
+import { CreatePermissionDto, UpdatePermissionDto } from './dto';
+import { Permission } from './permission.entity';
+import { SharedService } from '@/shared/shared.service';
 
 @Injectable()
 export class PermissionService {
@@ -21,6 +21,7 @@ export class PermissionService {
     @InjectRepository(Permission)
     private permissionRepo: Repository<Permission>,
   ) {}
+
   create(createPermissionDto: CreatePermissionDto) {
     const createPermission = this.permissionRepo.create(createPermissionDto);
     return this.permissionRepo.save(createPermission);
@@ -54,7 +55,8 @@ export class PermissionService {
 
   async update(id: number, updatePermissionDto: UpdatePermissionDto) {
     const permission = await this.permissionRepo.findOne({ where: { id } });
-    if (!permission) throw new BadRequestException('权限不存在或者已删除');
+    if (!permission)
+      throw new BadRequestException('权限不存在或者已删除');
     const newPermission = this.permissionRepo.merge(permission, updatePermissionDto);
     await this.permissionRepo.save(newPermission);
     return true;
@@ -66,7 +68,8 @@ export class PermissionService {
       where: { id },
       relations: { roles: true },
     });
-    if (!permission) throw new BadRequestException('权限不存在或者已删除');
+    if (!permission)
+      throw new BadRequestException('权限不存在或者已删除');
     if (permission.roles?.length)
       throw new BadRequestException('当前权限存在已授权的角色，不允许删除！');
     await this.permissionRepo.remove(permission);
@@ -83,6 +86,6 @@ export class PermissionService {
     const allMenu = await this.permissionRepo.find({
       where: { type: 'MENU' },
     });
-    return allMenu.some((menu) => menu.path && pathToRegexp(menu.path).test(path))
+    return allMenu.some(menu => menu.path && pathToRegexp(menu.path).test(path));
   }
 }

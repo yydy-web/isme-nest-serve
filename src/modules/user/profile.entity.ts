@@ -32,7 +32,7 @@ export class Profile {
   @Column({ nullable: true })
   email: string;
 
-  @OneToOne(() => User, (user) => user.profile, {
+  @OneToOne(() => User, user => user.profile, {
     createForeignKeyConstraints: false,
     onDelete: 'CASCADE',
   })

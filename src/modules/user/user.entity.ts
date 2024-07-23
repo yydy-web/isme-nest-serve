@@ -39,13 +39,13 @@ export class User {
   @UpdateDateColumn()
   updateTime: Date;
 
-  @OneToOne(() => Profile, (profile) => profile.user, {
+  @OneToOne(() => Profile, profile => profile.user, {
     createForeignKeyConstraints: false,
     cascade: true,
   })
   profile: Profile;
 
-  @ManyToMany(() => Role, (role) => role.users, {
+  @ManyToMany(() => Role, role => role.users, {
     createForeignKeyConstraints: false,
   })
   @JoinTable()

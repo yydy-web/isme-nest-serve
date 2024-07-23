@@ -6,15 +6,15 @@
  * Copyright © 2023 Ronnie Zhang(大脸怪) | https://isme.top
  **********************************/
 
-import { CustomException, ErrorCode } from '@/common/exceptions/custom.exception';
-import { ACCESS_TOKEN_EXPIRATION_TIME, USER_ACCESS_TOKEN_KEY } from '@/constants/redis.contant';
-import { RedisService } from '@/shared/redis.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
+import { RedisService } from '@/shared/redis.service';
+import { ACCESS_TOKEN_EXPIRATION_TIME } from '@/constants/redis.contant';
+import { CustomException, ErrorCode } from '@/common/exceptions/custom.exception';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -37,7 +37,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user.enable) {
       throw new CustomException(ErrorCode.ERR_11007);
     }
-    const currentRole = user.roles.find((item) => item.code === payload.currentRoleCode);
+    const currentRole = user.roles.find(item => item.code === payload.currentRoleCode);
     if (!currentRole.enable) {
       throw new CustomException(ErrorCode.ERR_11008);
     }

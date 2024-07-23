@@ -7,13 +7,13 @@
  **********************************/
 
 import { Body, Controller, Get, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { JwtGuard, LocalGuard, PreviewGuard } from '@/common/guards';
-import { ChangePasswordDto, RegisterUserDto } from './dto';
-import { UserService } from '@/modules/user/user.service';
 import * as svgCaptcha from 'svg-captcha';
-import { CustomException, ErrorCode } from '@/common/exceptions/custom.exception';
 import { ConfigService } from '@nestjs/config';
+import { AuthService } from './auth.service';
+import { ChangePasswordDto, RegisterUserDto } from './dto';
+import { JwtGuard, LocalGuard, PreviewGuard } from '@/common/guards';
+import { UserService } from '@/modules/user/user.service';
+import { CustomException, ErrorCode } from '@/common/exceptions/custom.exception';
 
 @Controller('auth')
 export class AuthController {

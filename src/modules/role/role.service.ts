@@ -7,6 +7,8 @@
  **********************************/
 
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Like, Repository } from 'typeorm';
 import {
   AddRolePermissionsDto,
   AddRoleUsersDto,
@@ -15,8 +17,6 @@ import {
   QueryRoleDto,
   UpdateRoleDto,
 } from './dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Like, Repository } from 'typeorm';
 import { Role } from './role.entity';
 import { Permission } from '@/modules/permission/permission.entity';
 import { SharedService } from '@/shared/shared.service';
@@ -31,11 +31,13 @@ export class RoleService {
     private permissionRepo: Repository<Permission>,
     @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
+
   async create(createRoleDto: CreateRoleDto) {
     const existRole = await this.roleRepo.findOne({
       where: [{ name: createRoleDto.name }, { code: createRoleDto.code }],
     });
-    if (existRole) throw new BadRequestException('角色已存在（角色名和角色编码不能重复）');
+    if (existRole)
+      throw new BadRequestException('角色已存在（角色名和角色编码不能重复）');
     const role = this.roleRepo.create(createRoleDto);
     if (createRoleDto.permissionIds) {
       role.permissions = await this.permissionRepo.find({
@@ -65,7 +67,7 @@ export class RoleService {
       skip: (pageNo - 1) * pageSize,
     });
     const pageData = data.map((item) => {
-      const permissionIds = item.permissions.map((p) => p.id);
+      const permissionIds = item.permissions.map(p => p.id);
       delete item.permissions;
       return { ...item, permissionIds };
     });
@@ -78,7 +80,8 @@ export class RoleService {
 
   async findRolePermissionsTree(code: string) {
     const role = await this.roleRepo.findOne({ where: { code } });
-    if (!role) throw new BadRequestException('当前角色不存在或者已删除');
+    if (!role)
+      throw new BadRequestException('当前角色不存在或者已删除');
     const permissions = await this.permissionRepo.find({
       where: role.code === 'SUPER_ADMIN' ? undefined : { roles: [role] },
     });
@@ -87,14 +90,17 @@ export class RoleService {
 
   async findRolePermissions(id: number) {
     const role = await this.findOne(id);
-    if (!role) throw new BadRequestException('当前角色不存在或者已删除');
+    if (!role)
+      throw new BadRequestException('当前角色不存在或者已删除');
     return this.permissionRepo.find({ where: { roles: [role] } });
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto) {
     const role = await this.findOne(id);
-    if (!role) throw new BadRequestException('角色不存在或者已删除');
-    if (role.code === 'SUPER_ADMIN') throw new BadRequestException('不允许修改超级管理员');
+    if (!role)
+      throw new BadRequestException('角色不存在或者已删除');
+    if (role.code === 'SUPER_ADMIN')
+      throw new BadRequestException('不允许修改超级管理员');
     const newRole = this.roleRepo.merge(role, updateRoleDto);
     if (updateRoleDto.permissionIds) {
       newRole.permissions = await this.permissionRepo.find({
@@ -110,9 +116,12 @@ export class RoleService {
       where: { id },
       relations: { users: true },
     });
-    if (!role) throw new BadRequestException('角色不存在或者已删除');
-    if (role.code === 'SUPER_ADMIN') throw new BadRequestException('不允许删除超级管理员');
-    if (role.users?.length) throw new BadRequestException('当前角色存在已授权的用户，不允许删除！');
+    if (!role)
+      throw new BadRequestException('角色不存在或者已删除');
+    if (role.code === 'SUPER_ADMIN')
+      throw new BadRequestException('不允许删除超级管理员');
+    if (role.users?.length)
+      throw new BadRequestException('当前角色存在已授权的用户，不允许删除！');
     await this.roleRepo.remove(role);
     return true;
   }
@@ -123,13 +132,15 @@ export class RoleService {
       where: { id },
       relations: { permissions: true },
     });
-    if (!role) throw new BadRequestException('角色不存在或者已删除');
-    if (role.code === 'SUPER_ADMIN') throw new BadRequestException('无需给超级管理员授权');
+    if (!role)
+      throw new BadRequestException('角色不存在或者已删除');
+    if (role.code === 'SUPER_ADMIN')
+      throw new BadRequestException('无需给超级管理员授权');
     const permissions = await this.permissionRepo.find({
-      where: permissionIds.map((item) => ({ id: item })),
+      where: permissionIds.map(item => ({ id: item })),
     });
     role.permissions = role.permissions
-      .filter((item) => !permissionIds.includes(item.id))
+      .filter(item => !permissionIds.includes(item.id))
       .concat(permissions);
     await this.roleRepo.save(role);
     return true;
@@ -141,9 +152,10 @@ export class RoleService {
       where: { id },
       relations: { users: true },
     });
-    if (!role) throw new BadRequestException('角色不存在或者已删除');
+    if (!role)
+      throw new BadRequestException('角色不存在或者已删除');
     const users = await this.userRepo.find({ where: { id: In(userIds) } });
-    role.users = role.users.filter((item) => !userIds.includes(item.id)).concat(users);
+    role.users = role.users.filter(item => !userIds.includes(item.id)).concat(users);
     await this.roleRepo.save(role);
     return true;
   }
@@ -154,8 +166,9 @@ export class RoleService {
       where: { id },
       relations: { users: true },
     });
-    if (!role) throw new BadRequestException('角色不存在或者已删除');
-    role.users = role.users.filter((item) => !userIds.includes(item.id));
+    if (!role)
+      throw new BadRequestException('角色不存在或者已删除');
+    role.users = role.users.filter(item => !userIds.includes(item.id));
     await this.roleRepo.save(role);
     return true;
   }

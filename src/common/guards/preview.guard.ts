@@ -7,8 +7,8 @@
  **********************************/
 
 import { CanActivate, Injectable } from '@nestjs/common';
-import { CustomException, ErrorCode } from '@/common/exceptions/custom.exception';
 import { ConfigService } from '@nestjs/config';
+import { CustomException, ErrorCode } from '@/common/exceptions/custom.exception';
 
 @Injectable()
 export class PreviewGuard implements CanActivate {

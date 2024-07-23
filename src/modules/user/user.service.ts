@@ -92,7 +92,8 @@ export class UserService {
 
   async remove(id: number) {
     // 不能删除根用户
-    if (id === 1) throw new CustomException(ErrorCode.ERR_11006, '不能删除根用户');
+    if (id === 1)
+      throw new CustomException(ErrorCode.ERR_11006, '不能删除根用户');
     await this.userRep.delete(id);
     await this.profileRep
       .createQueryBuilder('profile')
@@ -157,7 +158,7 @@ export class UserService {
         roles: true,
       },
     });
-    const currentRole = user.roles?.find((item) => item.code === roleCode && item.enable);
+    const currentRole = user.roles?.find(item => item.code === roleCode && item.enable);
     if (!currentRole) {
       throw new CustomException(ErrorCode.ERR_11005, '您目前暂无此角色或已被禁用，请联系管理员');
     }
@@ -170,9 +171,9 @@ export class UserService {
       relations: { roles: true },
     });
     const roles = await this.roleRepo.find({
-      where: roleIds.map((item) => ({ id: item })),
+      where: roleIds.map(item => ({ id: item })),
     });
-    user.roles = user.roles.filter((item) => !roleIds.includes(item.id)).concat(roles);
+    user.roles = user.roles.filter(item => !roleIds.includes(item.id)).concat(roles);
     await this.userRep.save(user);
     return true;
   }

@@ -7,8 +7,8 @@
  **********************************/
 
 import { Module } from '@nestjs/common';
-import { SharedModule } from './shared/shared.module';
 import { ConfigModule } from '@nestjs/config';
+import { SharedModule } from './shared/shared.module';
 import { UserModule } from './modules/user/user.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { RoleModule } from './modules/role/role.module';
